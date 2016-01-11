@@ -1,0 +1,15 @@
+prefix=/usr/local/Cellar/srecord/1.62
+exec_prefix=/usr/local/Cellar/srecord/1.62
+bindir=/usr/local/Cellar/srecord/1.62/bin
+libdir=/usr/local/Cellar/srecord/1.62/lib
+mandir=/usr/local/Cellar/srecord/1.62/share/man
+datarootdir=/usr/local/Cellar/srecord/1.62/share
+includedir=${prefix}/include
+
+Name: srecord
+Description: Manipulate EPROM load files
+Version: 1.62.D001
+URL: http://srecord.sourceforge.net
+Libs: -L${libdir} -lsrecord
+Libs.private: -lgpg-error -lgcrypt 
+Cflags: -I${includedir}

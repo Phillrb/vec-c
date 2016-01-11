@@ -1,0 +1,140 @@
+#!/bin/bash
+#
+# Copyright 2006, 2007 by Brian Dominy <brian@oddchange.com>
+#
+# This file is part of GCC6809.
+#
+# GCC6809 is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# GCC6809 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with GCC6809; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+
+as_prefix=/usr/local
+bindir=${as_prefix}/bin
+
+# Set defaults.  Some are based on the target type, which is 
+# determined by the name by which the program was invoked.
+output_file=a.out
+libpaths=
+libs=
+verbose=
+case $0 in
+	*m6809-coco-*)
+		options="-b .text=0x2000 -b .data=0x7000 -b .bss=0x7C00 -b .ctors=0x7F00 -b .dtors=0x7F80 -b vector=0x7FF0"
+		aslink_options="-nwxst"
+		exe_suffix=.bin
+		;;
+	*)
+		options="-b .text=0x10 -b vector=0xFFF0"
+		aslink_options="-nwxso"
+		exe_suffix=.s19
+		;;
+esac
+
+
+while [ "$1" != "" ]; do
+	arg=$1; shift
+	case $arg in
+		-gn)
+			# Generate NoICE debug file
+			aslink_options="${aslink_options}j"
+			;;
+		-gs)
+			# Generate SDCC debug file
+			aslink_options="${aslink_options}y"
+			;;
+		-o)
+			output_file=$1; shift
+			map_file=${output_file%\.o}.map
+			;;
+		-L*)
+			arg=${arg#-L}
+			libpaths="$libpaths -k $arg/"
+			;;
+		-l*)
+			arg=${arg#-l}
+			libs="$libs -l as-lib$arg.a"
+			;;
+		--section-start)
+			section_value=$1; shift
+			options="$options -b $section_value"
+			;;
+		-Tbss)
+			options="$options -b .bss=$1"; shift
+			;;
+		-Tdata)
+			options="$options -b .data=$1"; shift
+			;;
+		-Ttext|-Tcode)
+			options="$options -b .text=$1"; shift
+			;;
+		-v|--verbose)
+			verbose=1
+			;;
+		*crt0.o)
+			startup_files=$arg
+			;;
+		-g)
+			# Ignored by GNU ld; we should do the same
+			true
+			;;
+		-h|--help)
+			echo "as (m6809)"
+			exit 0
+			;;
+		--map)
+			aslink_options="${aslink_options}m"
+			;;
+		-T)
+			options="$options -f $1"; shift
+			;;
+		-*)
+			echo "ld (m6809): unknown option $arg"
+			exit 1
+			;;
+		*)
+			input_files="$input_files $arg"
+			if [ "$asoutput_file" = "" ]; then
+				asoutput_file=${arg%\.o}${exe_suffix}
+				asmap_file=${arg%\.o}.map
+			fi
+			;;
+	esac
+done
+
+if [ "$verbose" = "1" ]; then
+	echo "$bindir/aslink $aslink_options $options $asoutput_file $startup_files $input_files $libpaths $libs"
+	echo "Output file: $output_file"
+fi
+
+rm -f $asmap_file
+$bindir/aslink $aslink_options $options $asoutput_file $startup_files $input_files $libpaths $libs
+rc=$?
+
+if [ "$rc" != "0" ]; then
+	rm -f $asoutput_file $asmap_file
+	exit $rc
+fi
+
+if [ "$asoutput_file" != "$output_file" ]; then
+	if [ "$asoutput_file" != "" ]; then
+		mv $asoutput_file $output_file
+	fi
+fi
+
+if [ -f $asmap_file ]; then
+	if [ "$asmap_file" != "$map_file" ]; then
+		mv $asmap_file $map_file
+	fi
+fi
+

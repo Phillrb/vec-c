@@ -1,0 +1,103 @@
+.lf 1 ./man/man5/srec_ppb.5
+'\" t
+.\" srecord - Manipulate EPROM load files
+.\" Copyright (C) 2011 Peter Miller
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program. If not, see <http://www.gnu.org/licenses/>.
+.\"
+.ds n) srec_ppb
+.TH \*(n) 5 SRecord "Reference Manual"
+.SH NAME
+srec_ppb \- Stag Prom Programmer binary format
+.if require_index \{
+.\}
+.SH DESCRIPTION
+This is the native binary format of the Stag Prom Programmer.
+.SS Format
+The format is packet based.
+The packet is somposed of an 0x01 byte,
+the packet payload size (4 bytes, big\[hy]endian),
+the packet address size (4 bytes, big\[hy]endian),
+the packet data,
+and a one\[hy]byte simple sum of the payload data.
+.PP
+If the packet payload is more than 1024 bytes, there is an
+intermediate checksum after each 1024th payload pyte.
+.PP
+The end of file is indicated by a packet with a zero\[hy]length payload.
+.SS Command Line Option
+This format is specified using the \fB\-PPB\fP command line option.
+.SS Size Multiplier
+In general, binary data will expand in sized by approximately 1.002
+times when represented with this format (worse if there are many short
+data regions).
+.\" ------------------------------------------------------------------------
+.SH SEE ALSO
+http://www.stag.co.uk/
+.\" ------------------------------------------------------------------------
+.ds n) srec_cat
+.lf 1 ./man/man1/z_copyright.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 1998, 2006-2009 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.br
+.ne 1i
+.SH COPYRIGHT
+.lf 1 ./etc/version.so
+.ds V) 1.62.D001
+.ds v) 1.62
+.ds Y) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013
+.lf 23 ./man/man1/z_copyright.so
+.I \*(n)
+version \*(v)
+.br
+Copyright
+.if n (C)
+.if t \(co
+\*(Y) Peter Miller
+.br
+.PP
+The
+.I \*(n)
+program comes with ABSOLUTELY NO WARRANTY;
+for details use the '\fI\*(n) \-VERSion License\fP' command.
+This is free software
+and you are welcome to redistribute it under certain conditions;
+for details use the '\fI\*(n) \-VERSion License\fP' command.
+.br
+.ne 1i
+.SH AUTHOR
+.TS
+tab(;);
+l r l.
+Peter Miller;E\[hy]Mail:;pmiller@opensource.org.au
+/\e/\e*;WWW:;http://miller.emu.id.au/pmiller/
+.TE
+.lf 51 ./man/man5/srec_ppb.5
+.\" vim: set ts=8 sw=4 et :

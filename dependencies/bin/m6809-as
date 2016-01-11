@@ -1,0 +1,162 @@
+#!/bin/bash
+#
+# Copyright 2006 by Brian Dominy <brian@oddchange.com>
+#
+# This file is part of GCC6809.
+#
+# GCC6809 is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# GCC6809 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with GCC6809; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+
+as_prefix=/usr/local
+bindir=${as_prefix}/bin
+
+show_version () {
+cat <<END
+as6809 (GNU assembler frontend) 0.2 20061016
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License.  This program has absolutely no warranty.
+END
+}
+
+fatal_error () {
+	echo $* 1>&2
+	exit 1
+}
+
+# Assume nothing.
+
+input_file=
+output_file=
+list_file=
+options=
+list_file_enabled=n
+
+# Parse the command-line options.  See the GNU 'as' man page for
+# an explanation of all these options.  Our goal is to translate
+# them into as6809 form.
+
+while [ "$1" != "" ]; do
+	arg=$1; shift
+	case $arg in
+		-m6809)
+			true
+			;;
+		-gn)
+			# Generate NoICE debug symbols
+			options="${options}j"
+			;;
+		-gs)
+			# Generate SDCC debug symbols
+			options="${options}y"
+			;;
+		--globalize-symbols)
+			# Make all symbols global
+			options="${options}a"
+			;;
+		-m*)
+			fatal_error "invalid CPU option '$arg'"
+			;;
+		--)
+			fatal_error "standard input not supported"
+			;;
+		-a*)
+			options="${options}lc"
+			list_file_enabled=y
+			;;
+		-I*)
+			#include_file=${arg#-I}
+			#echo "warning: include path '$include_file' ignored"
+			;;
+		-MD)
+			fatal_error "assembler option '$arg' not supported"
+			;;
+		-o)
+			output_file=$1; shift
+			;;
+		-v|-version)
+			show_version
+			;;
+		--version)
+			show_version
+			exit 0
+			;;
+		-D|-f|-K|--traditional-format|-w|-x|-Z|-W|--no-warn)
+			# These options are accepted but ignored by GNU as.
+			true
+			;;
+		=*)
+			# Set the name of the listing file
+			list_file=${arg#=}
+			;;
+		-*)
+			echo "as (m6809): unrecognized option $arg"
+			exit 1
+			;;
+		*)
+			input_file=$arg
+			asoutput_file=${input_file%\.[sS]}.rel
+			if [ "x$list_file_enabled" = "xy" ]; then
+				aslist_file=${input_file%\.[sS]}.lst
+				if [ "x$list_file" = "x" ]; then
+					list_file=$aslist_file
+				fi
+			fi
+			;;
+	esac
+done
+
+# Complain if no input files given.  We don't support redirecting
+# from standard input.
+
+if [ "x$input_file" = "x" ]; then
+	fatal_error "no input file specified"
+fi
+
+# Invoke the real (as6809) assembler.
+# The -o option causes an object file to be created.
+# The -g option causes undefined symbols to be made global.
+
+$bindir/as6809 -og$options $input_file
+rc=$?
+
+# OK, see if the assembler succeeded or not.
+# If it failed, the source is copied to /tmp/as6809_error.s
+# so that it can be inspected.  GCC will normally delete any
+# temporary .s files that it generates.  This makes debugging
+# the compiler easier.
+#
+# Also, as6809 still creates a .o file even on an error;
+# that can confuse 'make'.  So delete the output file.
+
+if [ "$rc" != "0" ]; then
+	cp -p $input_file /tmp/as6809_error.s
+	rm -f $asoutput_file
+	exit $rc
+fi
+
+# as6809 creates the output file with the same name as the
+# input file, but with a .o extension.  The user may want
+# a different filename altogether, so honor that request here.
+
+if [ "$asoutput_file" != "$output_file" ]; then
+	mv $asoutput_file $output_file
+fi
+
+if [ "x$list_file_enabled" = "xy" ]; then
+	if [ "$aslist_file" != "$list_file" ]; then
+		mv $aslist_file $list_file
+	fi
+fi
+

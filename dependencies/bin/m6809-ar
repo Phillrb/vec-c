@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# Copyright 2006 by Brian Dominy <brian@oddchange.com>
+#
+# This file is part of GCC6809.
+#
+# GCC6809 is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# GCC6809 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with GCC6809; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+
+
+# This script is a frontend to the aslib library manager, to make it
+# look more like GNU ar.  Not all ar features are supported here.
+# It basically translates ar style options into aslib format.
+
+as_prefix=/usr/local
+bindir=${as_prefix}/bin; export bindir
+
+libcachetool ()
+{
+	libpathname=$1
+	libfile=`basename $libpathname`
+	libdir=`echo $libpathname | sed -e "s/\/$libfile//"`
+	lib=`echo $libfile | sed -e "s/\.a//"`
+	reallibfile=as-$libfile
+	libcache=${lib}-cache
+
+	if [ ! -d $libdir ]; then
+		echo "ar (m6809): no such directory $libdir"
+	fi
+	cd $libdir
+
+	if [ "$libfile" = "" ]; then
+		echo "ar (m6809): $libfile does not exist in $libdir"
+		return 1
+	fi
+
+	# Recreate the cache directory
+	rm -rf $libcache
+	mkdir -p $libcache
+
+	# Fill the cache
+	cd $libcache
+	$bindir/aslib x ../$libfile
+	cd ..
+	ls -1 ./$libcache/*.o > $reallibfile
+	return 0
+}
+
+
+# Parse and translate command-line options
+libs=
+options=$1; shift
+case $options in
+	rc|cru|-rc|-cru)
+		options="rc"
+		;;
+	rv)
+		options="rv"
+		;;
+	x|-x)
+		options="x"
+		;;
+	C|-C|--cache)
+		libpathname=$1; shift
+		libcachetool $libpathname
+		exit $?
+		;;
+	*)
+		options="rc $options"
+		if [ "$libname" = "" ]; then
+			libname=$options
+		fi
+		;;
+esac
+
+if [ "x$options" = "x" ]; then
+	echo "ar (m6809): no options given"
+	exit 1
+fi
+
+# Run the real archiver with translated options.
+$bindir/aslib $options $*

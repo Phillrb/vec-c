@@ -1,0 +1,392 @@
+.lf 1 ./man/man1/srec_cmp.1
+'\" t
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 1998, 2000, 2001, 2005-2009 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.ds n) srec_cmp
+.TH \*(n) 1 SRecord "Reference Manual"
+.SH NAME
+srec_cmp \- compare two EPROM load files for equality
+.if require_index \{
+.\}
+.SH SYNOPSIS
+.B \*(n)
+[
+.IR option \&...
+]
+.IR filename \&...
+.br
+.B \*(n)
+.B \-Help
+.br
+.B \*(n)
+.B \-VERSion
+.SH DESCRIPTION
+The
+.I \*(n)
+program is used to compare two EPROM load files for equality.  This
+comparison is performed irrespective of the load order of the data in
+each of the files.
+.lf 1 ./man/man1/o_input.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 1998-2007, 2009, 2011 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.SH INPUT FILE SPECIFICATIONS
+Input may be qualified in two ways:
+you may specify a data file or a data generator.
+format and you may specify filters to apply to them.
+An input file specification looks like this:
+.RS
+\f[I]data\[hy]file\fP [ \f[I]filter\fP \&... ]
+.br
+\f[I]data\[hy]generator\fP [ \f[I]filter\fP \&... ]
+.RE
+.SS Data Files
+Input from data files is
+specified by file name and format name.
+An input file specification looks like this:
+.RS
+\f[I]filename\fP [ \f[I]format\fP ][ \-ignore\[hy]checksums ]
+.RE
+The default format is Motorola S\[hy]Record format,
+but \f[I]many\fP others are also understood.
+.SS Data Generators
+It is also possible to generate data, rather than read it from a file.
+You may use a generator anywhere you could use a file.
+An input generator specification looks like this:
+.RS
+\fB\-GENerate\fP \f[I]address\[hy]range\fP \fB\-\fP\f[I]data\[hy]source\fP
+.RE
+Generators include random data and various forms of constant data.
+.SS Common Manual Page
+See \f[I]srec_input\fP(1) for complete details of input specifiers.
+This description is in a separate manual page
+because it is common to more than one SRecord command.
+.lf 45 ./man/man1/srec_cmp.1
+.br
+.ne 1i
+.SH OPTIONS
+The following options are understood:
+.lf 1 ./man/man1/o_at.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 2006, 2007 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.TP 8n
+\fB@\fP\fIfilename\fP
+The named text file is read for additional command line arguments.
+Arguments are separated by white space (space, tab, newline, \fIetc\fP).
+There is no wildcard mechanism.
+There is no quoting mechanism.
+Comments, which start with '\fB#\fP'
+and extend to the end of the line, are ignored.
+Blank lines are ignored.
+.lf 50 ./man/man1/srec_cmp.1
+.TP 8n
+.B \-Help
+.br
+Provide some help with using the
+.I \*(n)
+program.
+.TP 8n
+\fB\-IGnore_Checksums\fP
+.lf 1 ./man/man1/o_ignore_checksums.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 2005-2007, 2009, 2011 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+The \fB\-IGnore\[hy]Checksums\fP option may be used to disable checksum
+validation
+of input files, for those formats which have checksums at all.  Note
+that the checksum values are still read in and parsed (so it is still an
+error if they are missing) but their values are not checked.
+Used after an input file name, the option affects that file alone;
+used anywhere else on the command line, it applies to all following files.
+.lf 59 ./man/man1/srec_cmp.1
+.lf 1 ./man/man1/o_sequence.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 2006, 2007, 2011 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.TP 8n
+\fB\-Enable_Sequence_Warnings\fP
+.RS
+This option may be used to enable warnings about input files where the
+data records are not in strictly ascending address order.
+Only one warning is issued per input file.
+This is the default.
+.PP
+\f[B]Note:\fP the output of \fIsrec_cat\fP(1) is always in this order.
+.PP
+\f[B]Note:\fP This option must be used \f[I]before\fP the input file.
+This is because if there are several files on the command line, each may
+need different settings.  The setting remains in force until the next
+\fB\-Disable_Sequence_Warnings\fP option.
+.RE
+.TP 8n
+\fB\-Disable_Sequence_Warnings\fP
+.RS
+This option may be used to disable warnings about input files where the
+data records are not in strictly ascending address order.
+.PP
+\f[B]Note:\fP This option must be used \f[I]before\fP the offending
+input file.  This is because if there are several files on the command
+line, each may need different settings.  The setting remains in force
+until the next \fB\-Ensable_Sequence_Warnings\fP option.
+.RE
+.lf 60 ./man/man1/srec_cmp.1
+.lf 1 ./man/man1/o_multiple.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 2001, 2006, 2007 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.TP 8n
+\fB\-MULTiple\fP
+Use this option to permit a file to contain multiple (contradictory)
+values for some memory locations.  A warning will be printed.  The last
+value in the file will be used.  The default is for this condition to
+be a fatal error.
+.lf 61 ./man/man1/srec_cmp.1
+.TP 8n
+.B \-VERSion
+.br
+Print the version of the
+.I \*(n)
+program being executed.
+.TP 8n
+.B \-Verbose
+.br
+This option may be used to obtain more information about how and where
+the two files differ.  Please note that this takes longer, and the output
+can be voluminous.
+.PP
+All other options will produce a diagnostic error.
+.lf 1 ./man/man1/z_options.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 1998, 2006-2009 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.PP
+All options may be abbreviated;
+the abbreviation is documented as the upper case letters,
+all lower case letters and underscores (_) are optional.
+You must use consecutive sequences of optional letters.
+.PP
+All options are case insensitive,
+you may type them in upper case or lower case or a combination of both,
+case is not important.
+.PP
+For example:
+the arguments \[lq]\-help\[rq], \[lq]\-HEL\[rq] and \[lq]\-h\[rq] are
+all interpreted to mean the \fB\-Help\fP option.
+The argument \[lq]\-hlp\[rq] will not be understood,
+because consecutive optional characters were not supplied.
+.PP
+Options and other command line arguments may be
+mixed arbitrarily on the command line.
+.br
+.ne 4
+.PP
+The GNU long option names are understood.
+Since all option names for
+.I \*(n)
+are long,
+this means ignoring the extra leading \[lq]\-\[rq].
+The \[lq]\fB\-\-\fIoption\fB=\fIvalue\fR\[rq] convention is also understood.
+.lf 76 ./man/man1/srec_cmp.1
+.lf 1 ./man/man1/z_exit.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 1998, 2006, 2007 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.br
+.ne 1i
+.SH EXIT STATUS
+The
+.I \*(n)
+command will exit with a status of 1 on any error.
+The
+.I \*(n)
+command will only exit with a status of 0 if there are no errors.
+.lf 77 ./man/man1/srec_cmp.1
+.SH EXAMPLE
+A common use for the \fI\*(n)\fP command is to verify that a particular
+signature is present in the code.  In this example, the signature is
+in a file called\[lq]signature[rq], and the EPROM image is in a file
+called \[lq]image[rq].  We assume they are both Motorola S\[hy]Record format,
+although this will work for all formats:
+.RS
+.ft CW
+\*(n) signature  image \-crop \-within signature
+.ft R
+.RE
+The signature need not be at the start of memory, nor need it be one
+single contiguous piece of memory.  In the above example, the portions
+of the image which have the same address range as the signature are
+compared with the signature.
+.lf 1 ./man/man1/z_copyright.so
+.\"
+.\"     srecord - manipulate eprom load files
+.\"     Copyright (C) 1998, 2006-2009 Peter Miller
+.\"
+.\"     This program is free software; you can redistribute it and/or modify
+.\"     it under the terms of the GNU General Public License as published by
+.\"     the Free Software Foundation; either version 3 of the License, or
+.\"     (at your option) any later version.
+.\"
+.\"     This program is distributed in the hope that it will be useful,
+.\"     but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"     GNU General Public License for more details.
+.\"
+.\"     You should have received a copy of the GNU General Public License
+.\"     along with this program. If not, see
+.\"     <http://www.gnu.org/licenses/>.
+.\"
+.br
+.ne 1i
+.SH COPYRIGHT
+.lf 1 ./etc/version.so
+.ds V) 1.62.D001
+.ds v) 1.62
+.ds Y) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013
+.lf 23 ./man/man1/z_copyright.so
+.I \*(n)
+version \*(v)
+.br
+Copyright
+.if n (C)
+.if t \(co
+\*(Y) Peter Miller
+.br
+.PP
+The
+.I \*(n)
+program comes with ABSOLUTELY NO WARRANTY;
+for details use the '\fI\*(n) \-VERSion License\fP' command.
+This is free software
+and you are welcome to redistribute it under certain conditions;
+for details use the '\fI\*(n) \-VERSion License\fP' command.
+.br
+.ne 1i
+.SH AUTHOR
+.TS
+tab(;);
+l r l.
+Peter Miller;E\[hy]Mail:;pmiller@opensource.org.au
+/\e/\e*;WWW:;http://miller.emu.id.au/pmiller/
+.TE
+.lf 93 ./man/man1/srec_cmp.1
