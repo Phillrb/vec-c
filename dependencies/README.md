@@ -1,0 +1,1 @@
+Copy all '.bin' files to /usr/local/bin.

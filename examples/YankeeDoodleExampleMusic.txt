@@ -1,0 +1,103 @@
+// PORTED FROM: http://www.playvectrex.com/designit/chrissalo/sound2.asm
+
+const unsigned int yankee[] =
+{
+    // HEADER:
+    0xfe, 0xe8, //ADSR table address in Vectrex ROM
+    0xfe, 0xb6, //TWANG table address
+    
+    //DATA:
+  /*Ch1*/  /*Ch2*/ /*Ch3*/ /*Length*/
+    A2   ,                 12,
+    G2   ,                 12, // first byte is a note, to be
+    A2   ,                 12, // found in vectrex rom, is a
+    G2   ,                 12, // 64 byte table...
+    A2   ,                 6,  // last byte is length of note in ms
+    G2   ,                 6,
+    A2   ,                 6,
+    G2   ,                 6,
+    A2   ,                 6,
+    G2   ,                 6,
+    A2   ,                 12,
+    G2   ,                 12,   //----
+    A2   ,                 12,
+    G2   ,                 12,
+    A2   ,                 12,
+    G2   ,                 12,   //----
+    A2   ,                 6,
+    G2   ,                 6,
+    A2   ,                 6,
+    G2   ,                 6,
+    A2   ,                 6,
+    G2   ,                 6,
+    A2   ,                 6,    //----
+    G2   ,                 6,
+    A2   ,                 12,
+    G2   ,                 12,
+    A2  _,  A4  _,  A3  ,  12,
+    G2  _,  D5  _,  D4  ,  12,   //----
+    A2  _,  D5  _,  D4  ,  12,   //a '_' (128) means the next byte is
+    G2  _,  E5  _,  E4  ,  12,   //a note for the next channel
+    A2  _,  FS5 _,  FS4 ,  12,
+    G2  _,  D5  _,  D4  ,  12,   //----
+    A2  _,  FS5 _,  FS4 ,  12,
+    G2  _,  E5  _,  E4  ,  12,
+    A2  _,  A4  _,  A3  ,  12,   //TODO CONVERT DEC TO NOTES
+    G2  _,  D5  _,  D4  ,  12,   //----
+    A2  _,  D5  _,  D4  ,  12,
+    G2  _,  E5  _,  E4  ,  12,
+    A2  _,  FS5 _,  FS4 ,  12,
+    G2  _,  D5  _,  D4  ,  12,   //----
+    A2   ,                 12,
+    G2  _,  CS5 _,  CS4 ,  12,
+    A2  _,  A4  _,  A3  ,  12,
+    G2  _,  D5  _,  D4  ,  12,   //----
+    A2  _,  D5  _,  D4  ,  12,
+    G2  _,  E5  _,  E4  ,  12,
+    A2  _,  FS5 _,  FS4 ,  12,
+    G2  _,  G5  _,  G4  ,  12,   //----
+    A2  _,  FS5 _,  FS4 ,  12,
+    G2  _,  E5  _,  E4  ,  12,
+    A2  _,  D5  _,  D4  ,  12,
+    G2  _,  CS5 _,  CS4 ,  12,   //----
+    A2  _,  A4  _,  A3  ,  12,
+    G2  _,  B4  _,  B3  ,  12,
+    A2  _,  CS5 _,  CS4 ,  12,
+    G2  _,  D5  _,  D4  ,  12,   //----
+    A2   ,                 12,
+    G2  _,  D5  _,  D4  ,  12,
+    A2   ,                 12,
+    G2  _,  B4  _,  B3  ,  18,   //----
+            CS5 _,  CS4 ,  6,
+    A2  _,  B4  _,  B3  ,  12,
+    G2  _,  A4  _,  A3  ,  12,
+    A2  _,  B4  _,  B3  ,  12,   //----
+    G2  _,  CS5 _,  CS4 ,  12,
+    A2  _,  D5  _,  D4  ,  12,
+    G2,                    12,
+    G2  _,  A4  _,  A3  ,  18,   //----
+            B4  _,  B3  ,  6,
+    A2  _,  A4  _,  A3  ,  12,
+    G2  _,  G4  _,  G3  ,  12,
+    A2  _,  FS4 _,  FS3 ,  12,   //----
+    G2,                    12,
+    A2  _,  A4  _,  A3  ,  12,
+    G2,                    12,
+    A2  _,  B4  _,  B3  ,  18,   //----
+            CS5 _,  CS4 ,  6,
+    G2  _,  B4  _,  B3  ,  12,
+    A2  _,  A4  _,  A3  ,  12,
+    G2  _,  B4  _,  B3  ,  12,    //----
+    A2  _,  CS5 _,  CS4 ,  12,
+    G2  _,  D5  _,  D4  ,  12,
+    A2  _,  B4  _,  B3  ,  12,
+    G2  _,  A4  _,  A3  ,  12,    //----
+    A2  _,  D5  _,  D4  ,  12,
+    G2  _,  CS5 _,  CS4 ,  12,
+    A2  _,  E5  _,  E4  ,  12,
+    G2  _,  D5  _,  D4  ,  12,    //----
+    A2   ,                 12,
+    G2  _,  D5  _,  D4  ,  12,
+    A2   ,                 12,
+    0x80        //0x80 is end marker for music
+};

@@ -1,0 +1,24 @@
+/**** PRINTSHIPSX ****/
+//Put lives remaining in top right
+//'h' is a spaceship icon
+printShipsX(livesRemaining, 'h', 40, 120);
+
+
+//Use printShipsX to show a score between 2 players
+//player2 - convert score to a char by adding '0':
+printShipsX(player1Score, player2Score + '0', -30, 0);
+
+
+
+/**** PRINTSHIPS ****/
+//Put lives remaining in top right
+//'h' is a spaceship icon
+reset0Ref();
+moveToD(5,55);
+printShips(livesRemaining, 'h');
+
+//Use printShipsX to show a score between 2 players
+//player2 - convert score to a char by adding '0':
+reset0Ref();
+moveToD(-30,0);
+printShips(player1Score, player2Score + '0');

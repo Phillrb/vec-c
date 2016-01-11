@@ -1,0 +1,15 @@
+ //Play new song (1) - stop is 0 and continue is 0x80
+    musicFlag = true;
+
+    //MAIN LOOP
+    while (true)
+    {
+        //Point to sound
+        initMusicCHK(yankee);
+        
+        // wait for frame boundary (one frame = 30,000 cyles = 50 Hz)
+        waitRecal();
+        
+        //Play next note of sound
+        doSound();
+    }

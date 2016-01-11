@@ -1,0 +1,115 @@
+  //Change these!
+    bool p1_LR_on = true;
+    bool p1_UD_on = true;
+    bool p2_LR_on = true;
+    bool p2_UD_on = true;
+    bool isAnalog = true;
+    
+    int resolution = 0x80;
+    // - Only for analog
+    // - Must be a power of 2
+    // - 0x80 is least accurate
+    // - 0x00 is most accurate
+    
+    //p1LR, P1UD, P2LR, P2UD
+    joyEnableFlags(p1_LR_on, p1_UD_on, p2_LR_on, p2_UD_on);
+    if(isAnalog)
+    {
+        joyAnalogResolution(resolution);
+    }
+    
+    //MAIN LOOP
+    while (true)
+    {
+        
+        // wait for frame boundary (one frame = 30,000 cyles = 50 Hz)
+        waitRecal();
+        
+        //Read joysticks
+        if(isAnalog) joyAnalog();
+        else         joyDigital();
+        
+        intensA(0x5f);
+        
+        //Pot text
+        if(p1_LR_on)
+        {
+            reset0Ref();
+            moveToD(-43, 50);
+            if (pot0 == 0)      printStr("POT0 P1 L/R f\x80");
+            else if( pot0 > 0)  printStr("POT0 P1 L/R >\x80");
+            else                printStr("POT0 P1 L/R <\x80");
+        }
+        
+        if(p1_UD_on)
+        {
+            reset0Ref();
+            moveToD(-43, 40);
+            if (pot1 == 0)      printStr("POT1 P1 U/D f\x80");
+            else if( pot1 > 0)  printStr("POT1 P1 U/D a\x80");
+            else                printStr("POT1 P1 U/D c\x80");
+        }
+        
+        if(p2_LR_on)
+        {
+            reset0Ref();
+            moveToD(-43, 30);
+            if (pot2 == 0)      printStr("POT2 P2 L/R f\x80");
+            else if( pot2 > 0)  printStr("POT2 P2 L/R >\x80");
+            else                printStr("POT2 P2 L/R <\x80");
+        }
+        
+        if(p2_UD_on)
+        {
+            reset0Ref();
+            moveToD(-43, 20);
+            if (pot3 == 0)      printStr("POT3 P2 U/D f\x80");
+            else if( pot3 > 0)  printStr("POT3 P2 U/D a\x80");
+            else                printStr("POT3 P2 U/D c\x80");
+        }
+        
+
+        //Draw the joystick test lines
+        
+        //P1 title
+        scale = 0xFF;
+        reset0Ref();
+        moveToD(-36, 0);
+        printStr("P1\x80");
+        reset0Ref();
+        
+        //P1 box
+        moveToD(-45, -55);
+        drawLineD(0, 40);
+        drawLineD(40, 0);
+        drawLineD(0, -40);
+        drawLineD(-40, 0);
+        
+        //READ AND DRAW P1
+        reset0Ref();
+        moveToD(-25, -35);
+        scale = 0x20;
+        drawLineD(p1_LR_on ? pot0 : 0, p1_UD_on ? pot1 : 0);
+        
+        //P2 title
+        scale = 0xFF;
+        reset0Ref();
+        moveToD(14, 0);
+        printStr("P2\x80");
+        reset0Ref();
+        
+        //P2 box
+        reset0Ref();
+        scale = 0xFF;
+        moveToD(5, -55);
+        drawLineD(0, 40);
+        drawLineD(40, 0);
+        drawLineD(0, -40);
+        drawLineD(-40, 0);
+        
+        //READ AND DRAW P2
+        reset0Ref();
+        moveToD(25, -35);
+        scale = 0x20;
+        drawLineD(p2_LR_on ? pot2 : 0, p2_UD_on ? pot3 : 0);
+    }
