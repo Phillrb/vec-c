@@ -10,3 +10,6 @@ An installer will be created shortly; until then copy all '.bin' files from the 
 Manually copy the xcode template to the following location on you Mac (inside Xcode.app):
 
 /Applications/Xcode.app/Contents/Developer/Library/Xcode/Templates/Project\ Templates/Base/Other/Vectrex\ In\ C.xctemplate
+
+ParaJVE is available here: http://www.vectrex.fr/ParaJVE/
+
