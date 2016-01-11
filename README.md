@@ -7,6 +7,6 @@ Vec-C is an Xcode template that allows you to write a game for Vectrex on Mac. A
 
 An installer will be created shortly; until then copy all '.bin' files from the dependencies folders to /usr/local/bin.
 
-Manually copy the xocde template to the following location on you Mac (inside Xcode.app):
+Manually copy the xcode template to the following location on you Mac (inside Xcode.app):
 
 /Applications/Xcode.app/Contents/Developer/Library/Xcode/Templates/Project\ Templates/Base/Other/Vectrex\ In\ C.xctemplate
