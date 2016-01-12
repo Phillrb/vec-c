@@ -11,5 +11,9 @@ Manually copy the xcode template to the following location on you Mac (inside Xc
 
 /Applications/Xcode.app/Contents/Developer/Library/Xcode/Templates/Project\ Templates/Base/Other/Vectrex\ In\ C.xctemplate
 
-ParaJVE is available here: http://www.vectrex.fr/ParaJVE/
+Shout-outs:
+- Frank Buß -> http://www.frank-buss.de/vectrex/
+- Brian Dominy -> gcc6809 taken from https://github.com/bcd/gcc
+- ParaJVE -> http://www.vectrex.fr/ParaJVE/
+- Martin White -> https://github.com/Guddler
 
